@@ -25,6 +25,7 @@ public class Config {
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
+   // JdbcTemplate  veritabanına sorgu göndermek için kullanılıyor.
 }
 /*Spring container bu nesneleri tek bir yerde üretip
  tüm uygulamada paylaşır (Singleton bean).*/
