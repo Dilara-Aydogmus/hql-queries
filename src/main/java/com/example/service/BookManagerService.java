@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookManager {
+public class BookManagerService {
 
     private final BookStore store;
 
-    public BookManager(BookStore store) {
+    public BookManagerService(BookStore store) {
         this.store = store;
     }
 
