@@ -1,53 +1,56 @@
 package com.example.service;
 
-import com.example.data.BookStore;
 import com.example.model.Book;
+import com.example.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class BookManagerService {
+    private final BookRepository repo;
 
-    private final BookStore store;
-
-    public BookManagerService(BookStore store) {
-        this.store = store;
+    public BookManagerService(BookRepository repo) {
+        this.repo = repo;
     }
 
-    // Yeni kitap ekleme servisi
-    public Book add(String title, String author) {
-        return store.save(new Book(null, title, author));
-    }
-
-    // Kaydetme güncelleme servisi
-    public Book save(Book book) {
-        return store.save(book);
-    }
-
-    // listeleme servisi
     public List<Book> list() {
-        return store.findAll();
+        return repo.findAll();
     }
 
-    // ID ile getirme servisi
-    public Book get(Long id) {
-        return store.findById(id);
+    public Book find(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
-    // Sadece başlığı güncelleme servisi
-    public boolean updateTitle(Long id, String newTitle) {
-        Book b = store.findById(id);
-        if (b == null)
-            return false;
-
-        b.setTitle(newTitle);
-        store.save(b);
-        return true;
+    public Book add(String title, String author) {
+        Book book = new Book(title, author);
+        return repo.save(book);
     }
 
-    // Silme servisi
+    public Book update(Long id, String title, String author) {
+        Book book = repo.findById(id).orElse(null);
+        if (book != null) {
+            book.setTitle(title);
+            book.setAuthor(author);
+            repo.save(book);
+            return book;
+        }
+        return null;
+    }
+
     public void delete(Long id) {
-        store.deleteById(id);
+        repo.deleteById(id);
+    }
+
+    public List<Book> searchByTitle(String q) {
+        return repo.searchByTitle(q);
+    }
+
+    public List<Book> findByAuthorExact(String author) {
+        return repo.findByAuthorExact(author);
+    }
+
+    public List<Book> findBooksWithLongTitles(int len) {
+        return repo.findBooksWithLongTitles(len);
     }
 }
